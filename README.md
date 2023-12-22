@@ -6,7 +6,7 @@ Location is a huge barrier to getting jobs internationally -- it's not easy to n
 
 Rollbucks is a platform designed to facilitate African talents in receiving payments from companies worldwide. It offers payment solutions for freelancers and enables companies to easily pay their employees across different regions.
 
-## solution.
+## solution!
 
 Rollbucks aims to streamline the payment process for African talents by providing:
 
