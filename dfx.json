@@ -1,0 +1,30 @@
+{
+  "canisters": {
+    "rollbucks_backend": {
+      "candid": "src/rollbucks_backend/rollbucks_backend.did",
+      "package": "rollbucks_backend",
+      "type": "rust"
+    },
+    "rollbucks_frontend": {
+      "dependencies": [
+        "rollbucks_backend"
+      ],
+      "frontend": {
+        "entrypoint": "src/rollbucks_frontend/src/index.html"
+      },
+      "source": [
+        "src/rollbucks_frontend/assets",
+        "dist/rollbucks_frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
