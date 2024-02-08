@@ -1,6 +1,6 @@
-.PHONY: build deploy clean stop fresh
+.PHONY: build deploy redeploy clean fresh stop
 
-CRATE_NAME := hello_backend
+CRATE_NAME := rollbucks_backend
 
 build:
 	cargo build --release
@@ -11,14 +11,15 @@ deploy:
 	dfx start --background || [ $$? -eq 255 ]
 	dfx deploy
 
+redeploy:
+	make stop
+	make build
+	make deploy
+
 clean:
 	dfx stop
 	cargo clean
 	rm ./src/$(CRATE_NAME)/$(CRATE_NAME).did || [ $$? -eq 1 ]
-
-redeploy:
-	make build
-	make deploy
 
 fresh:
 	make clean
