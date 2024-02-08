@@ -2,3 +2,4 @@
 members = [
     "src/rollbucks_backend",
 ]
+resolver = "2"
