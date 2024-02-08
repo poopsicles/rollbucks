@@ -1,6 +1,7 @@
 use candid::CandidType;
 use thiserror::Error;
 
+/// The error type for `RollBucks`.
 #[derive(Debug, Error, CandidType)]
 pub enum RollBucksError{
     #[error("Company `{0}` not found")]

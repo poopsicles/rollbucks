@@ -3,7 +3,7 @@
 CRATE_NAME := rollbucks_backend
 
 build:
-	cargo build --release
+	cargo build --release --target wasm32-unknown-unknown
 	candid-extractor ./target/wasm32-unknown-unknown/release/$(CRATE_NAME).wasm > ./src/$(CRATE_NAME)/$(CRATE_NAME).did
 	dfx generate
 
@@ -23,8 +23,10 @@ clean:
 
 fresh:
 	make clean
-	make build
 	make redeploy
 
 stop:
 	dfx stop
+
+doc:
+	cargo doc --no-deps --open

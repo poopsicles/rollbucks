@@ -14,7 +14,7 @@ ic-cdk = "0.12"
 ic-cdk-timers = "0.6" # Feel free to remove this dependency if you don't need timers
 serde = { version = "1.0.196", features = ["derive"] }
 thiserror = "1.0.56"
-time = "0.3.31"
+time = "0.3.34"
 
 [lints.clippy]
 pedantic = "warn"
