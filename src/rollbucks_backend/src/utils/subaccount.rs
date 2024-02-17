@@ -5,7 +5,7 @@ use ic_ledger_types::Subaccount;
 ///
 /// # Panics
 /// - When generating random bytes fails
-pub async fn new_subaccount() -> Subaccount {
+pub async fn random_subaccount() -> Subaccount {
     Subaccount(
         raw_rand()
             .await

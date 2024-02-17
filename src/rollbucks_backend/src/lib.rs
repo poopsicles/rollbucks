@@ -6,12 +6,15 @@ This crate contains the backend for the `RollBucks` application hosted on the [I
 
 use candid::Principal;
 use errors::RollBucksError;
+use ic_cdk::api::management_canister::main::raw_rand;
 use models::{Company, Employee};
 
 use ic_ledger_types::{
-    account_balance, AccountBalanceArgs, AccountIdentifier, MAINNET_LEDGER_CANISTER_ID,
+    account_balance, transfer, AccountBalanceArgs, AccountIdentifier, Memo, Timestamp, Tokens,
+    TransferArgs, DEFAULT_FEE, MAINNET_LEDGER_CANISTER_ID,
 };
 use std::{cell::RefCell, collections::HashMap};
+use utils::random_memo;
 
 /// Error types for the `RollBucks` backend.
 pub mod errors;
@@ -44,6 +47,7 @@ pub fn get_all_companies() -> StoreType {
 
 #[ic_cdk::update]
 /// Adds a new company to the backing store.
+/// Returns the number of companies in the store.
 ///
 /// # Errors
 ///
@@ -66,6 +70,8 @@ pub async fn add_company(name: String) -> Result<usize, RollBucksError> {
 #[ic_cdk::update]
 /// Adds a new employee to the backing store.
 ///
+/// Returns the new employee.
+///
 /// # Errors
 ///
 /// Returns a `RollBucksError::CompanyNotFound` error if the company does not exist.
@@ -73,8 +79,9 @@ pub async fn add_employee(
     company_name: String,
     employee_full_name: String,
     employee_preferred_name: Option<String>,
+    employee_wage: u64,
 ) -> Result<Employee, RollBucksError> {
-    let e = Employee::new(employee_full_name, employee_preferred_name).await;
+    let e = Employee::new(employee_full_name, employee_preferred_name, employee_wage).await;
 
     ROLLBUCKS_STORE.with(|s| {
         let mut s = s.borrow_mut();
@@ -102,7 +109,7 @@ pub fn get_company_employees(company_name: String) -> Result<Vec<Employee>, Roll
         let s = s.borrow_mut();
 
         s.keys().find(|s| s.get_name() == company_name).map_or_else(
-            || Err(RollBucksError::CompanyNotFound(company_name.to_string())),
+            || Err(RollBucksError::CompanyNotFound(company_name.clone())),
             |c| {
                 s.get(c).map_or_else(
                     || unreachable!("company exists but no employees"),
@@ -113,8 +120,8 @@ pub fn get_company_employees(company_name: String) -> Result<Vec<Employee>, Roll
     })
 }
 
-/// Retrieves the amount of tokens in the company's wallet.
 #[ic_cdk::update]
+/// Retrieves the amount of tokens in the company's wallet.
 async fn get_company_wallet_balance(company_name: String) -> Result<u64, RollBucksError> {
     let principal = ROLLBUCKS_ADMIN_PRINCIPAL.with(|p| *p);
     // let canister =
@@ -127,7 +134,7 @@ async fn get_company_wallet_balance(company_name: String) -> Result<u64, RollBuc
             .find(|c| c.get_name() == company_name)
             .cloned()
             .map_or_else(
-                || Err(RollBucksError::CompanyNotFound(company_name.to_string())),
+                || Err(RollBucksError::CompanyNotFound(company_name.clone())),
                 |c| Ok(AccountIdentifier::new(&principal, &c.get_subaccount())),
             )
     })?;
@@ -138,6 +145,68 @@ async fn get_company_wallet_balance(company_name: String) -> Result<u64, RollBuc
             |_| Err(RollBucksError::FailedToGetBalance(company_name)),
             |b| Ok(b.e8s()),
         )
+}
+
+#[ic_cdk::update]
+/// Pays all employees of a company.
+///
+/// Returns the total amount paid.
+///
+/// # Errors
+/// - When there isn't enough tokens to pay everyone.
+/// - When the transfer fails.
+//TODO: add receipts?
+pub async fn pay_employees(company_name: String) -> Result<u64, RollBucksError> {
+    let principal = ROLLBUCKS_ADMIN_PRINCIPAL.with(|p| *p);
+
+    let company_balance = get_company_wallet_balance(company_name.clone())
+        .await
+        .map_err(|_| RollBucksError::FailedToGetBalance(company_name.clone()))?;
+
+    let company_subaccount = ROLLBUCKS_STORE.with(|s| {
+        s.borrow()
+            .keys()
+            .find(|c| c.get_name() == company_name)
+            .cloned()
+            .map_or_else(
+                || Err(RollBucksError::CompanyNotFound(company_name.to_string())),
+                |c| Ok(c.get_subaccount()),
+            )
+    })?;
+
+    let employees = get_company_employees(company_name.clone())?;
+
+    let total_wages: u64 = employees.iter().map(models::Employee::get_wage).sum();
+
+    if company_balance < total_wages {
+        return Err(RollBucksError::InsufficientFunds(company_name));
+    }
+
+    let mut total = 0;
+
+    for e in employees {
+        transfer(
+            MAINNET_LEDGER_CANISTER_ID,
+            TransferArgs {
+                memo: random_memo().await,
+                amount: Tokens::from_e8s(e.get_wage()),
+                fee: DEFAULT_FEE,
+                from_subaccount: Some(company_subaccount),
+                to: AccountIdentifier::new(&principal, &e.get_subaccount()),
+                created_at_time: Some(Timestamp {
+                    timestamp_nanos: ic_cdk::api::time(),
+                }),
+            },
+        )
+        .await
+        .map_err(|_| RollBucksError::TransferFailed(e.get_full_name(), company_name.clone()))?
+        .map_err(|_| RollBucksError::TransferFailed(e.get_full_name(), company_name.clone()))?;
+
+        total += e.get_wage();
+        total += DEFAULT_FEE.e8s();
+    }
+
+    Ok(total)
 }
 
 // Enable Candid export
