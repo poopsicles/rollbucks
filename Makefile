@@ -14,7 +14,8 @@ deploy:
 redeploy:
 	make stop
 	make build
-	make deploy
+	dfx start --background --clean || [ $$? -eq 255 ]
+	dfx deploy
 
 clean:
 	dfx stop
