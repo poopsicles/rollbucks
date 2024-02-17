@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    scroll-behavior: smooth;
+    scroll-margin: 100px;
+}
+
+h1 {
+    font-family: 'Space Grotesk';
+}
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+@media (hover: none) {
+    .feature-card {
+        background-color: #22262B !important;
+        color: #B2C2EC !important;
+    }
+}

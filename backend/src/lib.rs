@@ -2,18 +2,23 @@
 The `RollBucks` backend.
 
 This crate contains the backend for the `RollBucks` application hosted on the [Internet Computer](https://internetcomputer.org/).
+
+Rollbucks aims to facilitate African talents in receiving payments from companies worldwide.
+
+Location is a huge barrier to getting jobs internationally -- it's not easy to navigate tax laws and local payment methods. 
+ 
+We solve this by offering payment solutions for freelancers and enables companies to easily pay their employees across different regions.
 */
+
+use std::{cell::RefCell, collections::HashMap};
 
 use candid::Principal;
 use errors::RollBucksError;
-use ic_cdk::api::management_canister::main::raw_rand;
-use models::{Company, Employee};
-
 use ic_ledger_types::{
-    account_balance, transfer, AccountBalanceArgs, AccountIdentifier, Memo, Timestamp, Tokens,
+    account_balance, transfer, AccountBalanceArgs, AccountIdentifier, Timestamp, Tokens,
     TransferArgs, DEFAULT_FEE, MAINNET_LEDGER_CANISTER_ID,
 };
-use std::{cell::RefCell, collections::HashMap};
+use models::{Company, Employee};
 use utils::random_memo;
 
 /// Error types for the `RollBucks` backend.

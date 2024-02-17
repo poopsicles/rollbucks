@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "src/rollbucks_backend",
+    "backend/",
 ]
 resolver = "2"
