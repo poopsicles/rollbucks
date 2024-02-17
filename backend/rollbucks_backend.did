@@ -1,0 +1,28 @@
+type Company = record { legal_name : text; subaccount : vec nat8 };
+type Employee = record {
+  preferred_name : opt text;
+  date_registered : nat64;
+  wage : nat64;
+  subaccount : vec nat8;
+  full_name : text;
+};
+type Result = variant { Ok : nat64; Err : RollBucksError };
+type Result_1 = variant { Ok : Employee; Err : RollBucksError };
+type Result_2 = variant { Ok : vec Employee; Err : RollBucksError };
+type Result_3 = variant { Ok : nat64; Err : RollBucksError };
+type RollBucksError = variant {
+  FailedToGetBalance : text;
+  CompanyAlreadyExists : text;
+  CompanyNotFound : text;
+  Unknown;
+  TransferFailed : record { text; text };
+  InsufficientFunds : text;
+};
+service : {
+  add_company : (text) -> (Result);
+  add_employee : (text, text, opt text, nat64) -> (Result_1);
+  get_all_companies : () -> (vec record { Company; vec Employee }) query;
+  get_company_employees : (text) -> (Result_2) query;
+  get_company_wallet_balance : (text) -> (Result_3);
+  pay_employees : (text) -> (Result_3);
+}

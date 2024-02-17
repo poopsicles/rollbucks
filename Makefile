@@ -4,7 +4,7 @@ CRATE_NAME := rollbucks_backend
 
 build:
 	cargo build --release --target wasm32-unknown-unknown
-	candid-extractor ./target/wasm32-unknown-unknown/release/$(CRATE_NAME).wasm > ./$(CRATE_NAME).did
+	candid-extractor ./target/wasm32-unknown-unknown/release/$(CRATE_NAME).wasm > ./backend/$(CRATE_NAME).did
 	dfx generate
 
 deploy:
