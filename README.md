@@ -24,15 +24,15 @@ built with love by [ofure](https://github.com/Ofure004) & [fumnanya](https://git
 
 ## pics
 
-| ![Cargo-generated documentation](images/cargo-doc.png.png) |
+| ![Cargo-generated documentation](images/cargo-doc.png) |
 |:--:|
 | *The generated documentation* |
 
-| ![The frontend hosted on the ICP](images/cargo-doc.png.png) |
+| ![The frontend hosted on the ICP](images/frontend.png) |
 |:--:|
 | *Frontend hosted on the ICP* |
 
-| ![Candid UI for the backend](images/cargo-doc.png.png) |
+| ![Candid UI for the backend](images/backend.png) |
 |:--:|
 | *Candid UI for the backend* |
 
