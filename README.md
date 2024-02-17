@@ -13,15 +13,28 @@ we aim to streamline the payment process for African talents by providing:
 - **Simplified Transactions:** Offering a straightforward payment process for freelancers and companies.
 - **Cross-Border Payments:** Enabling hassle-free transactions across different regions.
 
-check out the frontend over here: [Ofure004/rollbucks_frontend](https://github.com/Ofure004/rollbucks_frontend)
+check out the frontend repo over here: [Ofure004/rollbucks_frontend](https://github.com/Ofure004/rollbucks_frontend)
+
+...and the live deployments at:
+
+- frontend: [https://ljunz-maaaa-aaaao-a3hsa-cai.icp0.io/](https://ljunz-maaaa-aaaao-a3hsa-cai.icp0.io/)
+- backend: [https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=l4t4u-niaaa-aaaao-a3hrq-cai](https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=l4t4u-niaaa-aaaao-a3hrq-cai)
 
 built with love by [ofure](https://github.com/Ofure004) & [fumnanya](https://github.com/poopsicles)
 
 ## pics
 
-| ![Cargo doc output](images/cargo-doc.png.png) |
+| ![Cargo-generated documentation](images/cargo-doc.png.png) |
 |:--:|
-| *The documentation |
+| *The generated documentation* |
+
+| ![The frontend hosted on the ICP](images/cargo-doc.png.png) |
+|:--:|
+| *Frontend hosted on the ICP* |
+
+| ![Candid UI for the backend](images/cargo-doc.png.png) |
+|:--:|
+| *Candid UI for the backend* |
 
 ## building
 
