@@ -1,5 +1,8 @@
 # rollbucks
 
+> [!IMPORTANT]
+> check out the frontend repo over here: [Ofure004/rollbucks_frontend](https://github.com/Ofure004/rollbucks_frontend)
+
 rollbucks aims to facilitate African talents in receiving payments from companies worldwide.
 
 location is a huge barrier to getting jobs internationally -- it's not easy to navigate tax laws and local payment methods. 
@@ -12,8 +15,6 @@ we aim to streamline the payment process for African talents by providing:
 - **Company Payroll Solutions:** Offering a system for companies to efficiently pay their employees, irrespective of their location.
 - **Simplified Transactions:** Offering a straightforward payment process for freelancers and companies.
 - **Cross-Border Payments:** Enabling hassle-free transactions across different regions.
-
-check out the frontend repo over here: [Ofure004/rollbucks_frontend](https://github.com/Ofure004/rollbucks_frontend)
 
 ...and the live deployments at:
 
